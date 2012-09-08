@@ -1,0 +1,7 @@
+#!/usr/bin/env ruby
+
+$:.unshift File.expand_path("../../lib", __FILE__)
+
+require "rpi-light-painting/cli"
+
+RpiLP::CLI.new().start
