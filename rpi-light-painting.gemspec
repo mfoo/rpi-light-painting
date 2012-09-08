@@ -5,7 +5,7 @@ require 'rpi-light-painting/version'
 
 Gem::Specification.new do |gem|
   gem.name          = "rpi-light-painting"
-  gem.version       = Rpi::Light::Painting::VERSION
+  gem.version       = RpiLP::VERSION
   gem.authors       = ["Martin Foot"]
   gem.email         = ["martin@mfoot.com"]
   gem.description   = %q{TODO: Write a gem description}
