@@ -1,12 +1,13 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="wrap_content"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="horizontal" >
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+   <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical" >
 
         <ImageView
             android:id="@+id/settings_menu_button"
@@ -14,33 +15,11 @@
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_preferences" />
 
-        <TextView
-            android:id="@+id/wireless_connection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wireless_connection" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
         <ImageView
             android:id="@+id/play_menu_button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_media_play" />
-
-        <TextView
-            android:id="@+id/wireless_connection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wireless_connection" />
-    </LinearLayout>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
 
         <ImageView
             android:id="@+id/edit_menu_button"
@@ -48,28 +27,62 @@
             android:layout_height="wrap_content"
             android:src="@android:drawable/ic_menu_edit" />
 
-        <TextView
-            android:id="@+id/wireless_connection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wireless_connection" />
+     
     </LinearLayout>
 
     <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical" >
 
-        <ImageView
-            android:id="@+id/gallery_menu_button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_gallery" />
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
 
-        <TextView
-            android:id="@+id/wireless_connection"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/wireless_connection" />
+            <TextView
+                android:id="@+id/wireless_connection"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/wireless_connection" />
+
+            <ImageView
+                android:id="@+id/wireless_connection_status"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@android:drawable/checkbox_off_background" />
+
+            <Button
+                android:id="@+id/wireless_connect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connect" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content" >
+
+            <TextView
+                android:id="@+id/server_connection"
+                android:layout_width="0dip"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/server_connection" />
+
+            <ImageView
+                android:id="@+id/ssh_connection_status"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:src="@android:drawable/checkbox_off_background" />
+
+            <Button
+                android:enabled="false"
+                android:id="@+id/ssh_connect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/connect" />
+        </LinearLayout>
     </LinearLayout>
 
 </LinearLayout>
