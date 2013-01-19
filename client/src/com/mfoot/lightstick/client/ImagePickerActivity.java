@@ -8,7 +8,6 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.util.Properties;
 
-import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.database.Cursor;
@@ -19,51 +18,53 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TabHost;
 
 import com.jcraft.jsch.ChannelExec;
 import com.jcraft.jsch.ChannelSftp;
 import com.jcraft.jsch.JSch;
 import com.jcraft.jsch.Session;
 
-public class ImagePickerActivity extends Activity implements
-		MediaScannerConnectionClient {
+public class ImagePickerActivity extends Fragment implements
+		MediaScannerConnectionClient, TabHost.OnTabChangeListener {
 
 	private static final String FILE_TYPE = "image/*";
-	private static final String IMAGE_FOLDER = "lightscythe";
+	public static final String IMAGE_FOLDER = "lightscythe";
 	private static final String LIGHTSCYTHE_FILE = "input.png";
 
 	private MediaScannerConnection conn;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-		setContentView(R.layout.image_picker);
-	}
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		super.onCreateView(inflater, container, savedInstanceState);
+//		Button selectImageButton = (Button) findViewById(R.id.select_image);
+//		selectImageButton.setOnClickListener(new OnClickListener() {
+//			@Override
+//			public void onClick(View v) {
+//				Log.d("la", "select image button clicked");
+//				startScan();
+//			}
+//		});
 
-	@Override
-	public void onResume() {
-		super.onResume();
-		Button selectImageButton = (Button) findViewById(R.id.select_image);
-		selectImageButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				Log.d("la", "select image button clicked");
-				startScan();
-			}
-		});
+		return (ImageView) inflater.inflate(R.layout.image_picker, container,
+				false);
 	}
 
 	private void startScan() {
 		if (conn != null) {
 			conn.disconnect();
 		}
-		conn = new MediaScannerConnection(this, this);
-		conn.connect();
+//		conn = new MediaScannerConnection(this.getActivity(), this.getActivity());
+//		conn.connect();
 	}
 
 	@Override

@@ -8,4 +8,8 @@
     <string name="no_image_selected">No image selected</string>
     <string name="start_scythe">Start</string>
     <string name="stop_scythe">Stop</string>
+    <string name="pick_colour">Change colour</string>
+    <string name="drag_mode">Drag</string>
+    <string name="draw_mode">Draw</string>
+    <string name="save_image">Save</string>
 </resources>

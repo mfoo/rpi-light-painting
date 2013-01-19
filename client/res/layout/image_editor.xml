@@ -33,14 +33,37 @@
         android:layout_height="fill_parent"
         android:orientation="vertical" >
 
-      <Button android:id="@+id/color_picker"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content" />
-       
-      <SurfaceView 
-          android:id="@+id/image_editor_pane"
-          android:layout_height="fill_parent"
-          android:layout_width="fill_parent"/>
+        <LinearLayout
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal" >
+
+            <Button
+                android:id="@+id/color_picker"
+                android:layout_width="wrap_content"
+                android:layout_height="30dip"
+                android:text="@string/pick_colour"
+                android:textSize="8dip" />
+
+            <Button
+                android:id="@+id/edit_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="30dip"
+                android:text="@string/drag_mode"
+                android:textSize="8dip" />
+            
+            <Button
+                android:id="@+id/save_image"
+                android:layout_width="wrap_content"
+                android:layout_height="30dip"
+                android:text="@string/save_image"
+                android:textSize="8dip" />
+        </LinearLayout>
+
+        <com.mfoot.lightstick.client.MyView
+            android:id="@+id/image_editor_pane"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
     </LinearLayout>
 
 </LinearLayout>
