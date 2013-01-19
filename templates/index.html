@@ -1,0 +1,125 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Time Lapse Photograph System</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="TODO">
+  <meta name="author" content="Martin Foot">
+  <link href="static/bootstrap/css/bootstrap.css" rel="stylesheet">
+ <style>
+      body {
+        padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+      }
+  </style>
+  <link href="static/bootstrap/css/bootstrap-responsive.css" rel="stylesheet"> 
+</head>
+<body>
+  <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+      <div class="container">
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </a>
+        <a class="brand" href="#">RPi Timelapse System</a>
+        <div class="nav-collapse collapse">
+          <ul class="nav">
+            <li class="active"><a href="#">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li><a href="#contact">Contact</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="well">
+      <div id="pause-button" class="btn btn-warning">Pause</div>
+      <div id="continue-button" class="btn btn-success">Continue</div>
+      <div id="stop-button" class="btn btn-important">Stop</div>
+      <div id="start-button" class="btn btn-success">Start</div>
+      <div id="faster-button" class="btn btn-success">Faster</div>
+      <div id="slower-button" class="btn btn-success">~Slower</div>
+    </div>
+  </div>
+
+<script src="static/jquery-1.8.3.min.js"></script>
+<script src="static/bootstrap/js/bootstrap.min.js"></script>
+<script type="text/javascript">
+ jQuery(document).ready(function() {
+      var timerId = 0;
+
+      // Hide all buttons on page load
+      jQuery("div.button").hide();
+
+      function toggleButtonState(start, stop, pause, cont) {
+        var startButton = jQuery("#start-button");
+        var stopButton = jQuery("#stop-button");
+        var pauseButton = jQuery("#pause-button");
+        var continueButton = jQuery("#continue-button");
+        if(start) { startButton.show() } else { startButton.hide(); }
+        if(stop) { stopButton.show() } else { stopButton.hide(); }
+        if(pause) { pauseButton.show() } else { pauseButton.hide(); }
+        if(cont) { continueButton.show() } else { continueButton.hide(); }
+      }
+
+      function refreshUI(options) {
+        // Display the buttons based on the status
+        if(options.status == 'stopped') {
+          toggleButtonState(true, false, false, false);
+        } else if(options.status == 'running') {
+          toggleButtonState(false, true, true, false);
+        } else if(options.status == 'paused') {
+          toggleButtonState(false, true, false, true);
+        }
+      }
+
+      function update() {
+        // When the page loads, fetch the status and render
+        jQuery.get('/status', function(data, textStatus, xhr) {
+          refreshUI(JSON.parse(data));
+        });
+      }
+
+      jQuery("body").on("click", "#start-button", function() {
+        jQuery.get('/start','none', function(data) {
+          update();
+        });
+      });
+
+      jQuery("body").on("click", "#stop-button", function() {
+        jQuery.get('/stop','none', function(data) {
+          update();
+        });
+      });
+
+      jQuery("body").on("click", "#pause-button", function() {
+        jQuery.get('/pause','none', function(data) {
+          update();
+        });
+      });
+
+      jQuery("body").on("click", "#continue-button", function() {
+        jQuery.get('/continue','none', function(data) {
+          update();
+        });
+      });
+
+      jQuery("body").on("click", "#faster-button", function() {
+        jQuery.get('/faster','none', function(data) {
+          update();
+        });
+      });
+
+      jQuery("body").on("click", "#slower-button", function() {
+        jQuery.get('/slower','none', function(data) {
+          update();
+        });
+      });
+    });
+  </script>
+</body>
+</html>
