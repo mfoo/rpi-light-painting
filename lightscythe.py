@@ -47,11 +47,11 @@ class LightStick:
     self.updateRate = 0.01
 
   def faster(self, amount):
-    self.updateRate += amount
-
-  def slower(self, amount):
     if self.updateRate - amount > 0:
       self.updateRate -= amount
+
+  def slower(self, amount):
+    self.updateRate += amount
 
   def start(self):
     self.working = True
