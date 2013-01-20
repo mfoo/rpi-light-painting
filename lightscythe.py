@@ -66,8 +66,10 @@ class LightStick:
     # R, G, B byte per pixel, plus extra '0' byte at end for latch.
     print "Allocating..."
     self.column = [0 for x in range(width + 1)]
+    self.blackColumn = bytearray(height * 3 + 1)
+
     for x in range(width + 1):
-     self.column[x] = bytearray(height * 3 + 1)
+      self.column[x] = bytearray(height * 3 + 1)
 
     for x in range(0, width):
       for y in range(0, height):
@@ -94,10 +96,12 @@ class LightStick:
       if not self.paused:
         for col in self.column:
           spidev.write(col)
-#          spidev.flush()
         time.sleep(self.updateRate)
       else:
         time.sleep(0.5)
+
+    spidev.write(self.blackColumn)
+    spidev.flush()
 
   def pause(self):
     self.paused = True
