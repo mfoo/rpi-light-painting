@@ -18,33 +18,45 @@ from PIL import Image
 from threading import Timer
 import thread
 import web
+import os
+import json
 
 # Paths for web.py
 urls = (
   '/static/.+', 'static',
+  '/upload/(.+)', 'upload',
   '/start', 'start',
   '/stop', 'stop',
   '/pause', 'pause',
   '/continue', 'resume',
   '/faster', 'faster',
   '/slower', 'slower',
+  '/status', 'status',
   '/', 'index'
 )
 
 # Configurable values
-filename  = "london.png"
 dev       = "/dev/spidev0.0"
 
 spidev    = file(dev, "wb")
 
 # Setup of web.py templates
-render = web.template.render('templates/')
+render = web.template.render('templates/', globals={'os': os})
 
 class LightStick:
   """Represent the state of a light stick"""
   def __init__(self):
     self.paused = False
-    self.updateRate = 0.01
+    self.updateRate = 0.8
+    self.working = False
+
+  def get_status_string(self):
+    if self.paused:
+      return 'paused'
+    if self.working:
+      return 'running'
+    else:
+      return 'stopped'
 
   def faster(self, amount):
     if self.updateRate - amount > 0:
@@ -53,9 +65,13 @@ class LightStick:
   def slower(self, amount):
     self.updateRate += amount
 
-  def start(self):
+  def start(self, filename="london.png"):
+    if self.working:
+      self.stop()
+
     self.working = True
     print "Loading..."
+
     img       = Image.open(filename).convert("RGB")
     pixels    = img.load()
     width     = img.size[0]
@@ -112,18 +128,41 @@ class LightStick:
 class static:
   """Serves all of the static assets in the static folder"""
   def GET(self, path):
+    print("SERVING STATIC :D")
     raise web.seeother(path)
+
+class upload:
+  """Serves all of the static assets in the static folder"""
+  def GET(self, path):
+    web.header("Content-Type", "image/png")
+    return open('upload/%s'%path,"rb").read()
+    raise web.seeother('/')
 
 class index:
   """Main web app entry point"""
   def GET(self):
     return render.index()
 
+  def POST(self):
+    """Allow people to upload files into the /upload directory."""
+    x = web.input(fileUpload={})
+    uploadDir = os.path.join(os.path.abspath(os.path.dirname(__file__)), 'upload')
+    filepath=x['fileUpload'].filename.replace('\\','/') # replaces the windows-style slashes with linux ones.
+    filename=filepath.split('/')[-1] # splits the and chooses the last part (the filename with extension)
+    fout = open(os.path.join(uploadDir, filename),'w')
+    fout.write(x['fileUpload'].file.read())
+    fout.close()
+    raise web.seeother('/upload')
+
 class start:
   """Start the time lapse"""
   def GET(self):
     lightstick.start()
     return "Success"
+
+  def POST(self):
+    data = web.input()
+    lightstick.start(data.image)
 
 class stop:
   """Stop the time lapse"""
@@ -150,6 +189,10 @@ class faster:
 class slower:
   def GET(self):
     lightstick.slower(0.05)
+
+class status:
+  def GET(self):
+    return json.dumps({'status' : lightstick.get_status_string()})
 
 lightstick = LightStick()
 

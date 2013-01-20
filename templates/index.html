@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="utf-8">
-  <title>Time Lapse Photograph System</title>
+  <title>Light Painting Photograph System</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta name="description" content="TODO">
   <meta name="author" content="Martin Foot">
@@ -23,7 +23,7 @@
           <span class="icon-bar"></span>
           <span class="icon-bar"></span>
         </a>
-        <a class="brand" href="#">RPi Timelapse System</a>
+        <a class="brand" href="#">RPi Light Painting System</a>
         <div class="nav-collapse collapse">
           <ul class="nav">
             <li class="active"><a href="#">Home</a></li>
@@ -37,12 +37,50 @@
 
   <div class="container">
     <div class="well">
-      <div id="pause-button" class="btn btn-warning">Pause</div>
-      <div id="continue-button" class="btn btn-success">Continue</div>
-      <div id="stop-button" class="btn btn-important">Stop</div>
-      <div id="start-button" class="btn btn-success">Start</div>
-      <div id="faster-button" class="btn btn-success">Faster</div>
-      <div id="slower-button" class="btn btn-success">Slower</div>
+      <div id="pause-button" class="btn btn-warning">
+        <i class="icon-pause"></i>
+        Pause
+      </div>
+      <div id="continue-button" class="btn btn-success">
+        <i class="icon-play"></i>
+        Continue
+      </div>
+      <div id="stop-button" class="btn btn-important">
+        <i class="icon-stop"></i>
+        Stop
+      </div>
+      <div id="start-button" class="btn btn-success">
+        <i class="icon-play"></i>
+        Start
+      </div>
+      <div id="faster-button" class="btn btn-success">
+        <i class="icon-plus"></i>
+        Faster
+      </div>
+      <div id="slower-button" class="btn btn-success">
+        <i class="icon-minus"></i>
+        Slower
+      </div>
+      <div id="shutdown-button" class="btn btn-success">
+        <i class="icon-off"></i>
+        Shut Down
+      </div>
+    </div>
+
+    <form method="POST" enctype="multipart/form-data" action="">
+      <fieldset>
+        <legend>Custom File Upload</legend>
+        <label>Choose a file to upload. It should be a 32 pixel high png file. There are no restrictions on width.</label>
+        <input type="file" name="fileUpload">
+        <span class="help-block"></span>
+        <button type="submit" class="btn">Submit</button>
+      </fieldset>
+    </form>
+
+    <label>Image Gallery</label>
+    <div id="image-library" class="well">
+      $for img in os.listdir("upload"):
+        <img src="upload/$img" class="img-rounded"/>
     </div>
   </div>
 
@@ -60,6 +98,8 @@
         var stopButton = jQuery("#stop-button");
         var pauseButton = jQuery("#pause-button");
         var continueButton = jQuery("#continue-button");
+        var fasterButton = jQuery("#faster-button");
+        var slowerButton = jQuery("slower-button");
         if(start) { startButton.show() } else { startButton.hide(); }
         if(stop) { stopButton.show() } else { stopButton.hide(); }
         if(pause) { pauseButton.show() } else { pauseButton.hide(); }
@@ -79,9 +119,9 @@
 
       function update() {
         // When the page loads, fetch the status and render
-        jQuery.get('/status', function(data, textStatus, xhr) {
-          refreshUI(JSON.parse(data));
-        });
+        jQuery.get('/status', function(data) {
+          refreshUI(data);
+        }, 'json');
       }
 
       jQuery("body").on("click", "#start-button", function() {
@@ -116,6 +156,12 @@
 
       jQuery("body").on("click", "#slower-button", function() {
         jQuery.get('/slower','none', function(data) {
+          update();
+        });
+      });
+
+      jQuery("body").on("click", "#image-library img", function() {
+        jQuery.post('/start', {'image': jQuery(this).attr('src')}, function() {
           update();
         });
       });
